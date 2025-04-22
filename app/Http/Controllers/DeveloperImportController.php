@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\ResponseHelper;
 use App\Http\Controllers\Base\Controller;
 use App\Services\ImportDeveloperService;
 use Illuminate\Http\Request;
@@ -28,18 +29,22 @@ class DeveloperImportController extends Controller
     public function import(Request $request)
     {
         try {
+            // Call the service to handle the import
             $result = $this->service->handleImport($request);
 
-            return response()->json([
-                'success' => true,
-                'message' => $result['message'],
-                'data' => $result['data'],
-            ]);
+            // Use the ResponseHelper to send a success response
+            return ResponseHelper::success(
+                'success',
+                $result['message'],
+                $result['data']
+            );
         } catch (\Throwable $th) {
-            return response()->json([
-                'success' => false,
-                'message' => $th->getMessage(),
-            ], 500);
+            // Use the ResponseHelper to send an error response
+            return ResponseHelper::error(
+                'error',
+                $th->getMessage(),
+                500
+            );
         }
     }
 }
