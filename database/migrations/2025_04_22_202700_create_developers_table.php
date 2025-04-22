@@ -22,7 +22,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->enum('status', DeveloperStatus::getValues())->default(DeveloperStatus::ACTIVE);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
