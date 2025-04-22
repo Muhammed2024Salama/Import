@@ -33,6 +33,13 @@ class ResponseHelper
         );
     }
 
+    /**
+     * @param $status
+     * @param $message
+     * @param $data
+     * @param $statusCode
+     * @return JsonResponse
+     */
     public static function sendResponse($status = 'success', $message, $data = [], $statusCode = 200)
     {
         return response()->json([
