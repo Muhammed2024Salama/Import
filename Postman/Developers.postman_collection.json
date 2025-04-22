@@ -1,0 +1,403 @@
+{
+	"info": {
+		"_postman_id": "224b08ee-eb39-44ab-9fbc-9e8661872e65",
+		"name": "Developers",
+		"description": "### 📁 **Collection Name**: Developer API\n\n---\n\n#### 📌 **1\\. Get All Developers**\n\n- **Method**: `GET`\n    \n- **URL**: `http://your-domain.test/api/developers`\n    \n- **Headers**:\n    \n    - `Accept: application/json`\n        \n\n#### 📌 **2\\. Create Developer**\n\n- **Method**: `POST`\n    \n- **URL**: `http://your-domain.test/api/developers`\n    \n- **Headers**:\n    \n    - `Accept: application/json`\n        \n    - `Content-Type: multipart/form-data`\n        \n- KeyValue (Example)TypenameJohn Doetextemail[john@example.com](https://null)textphone_number1234567890textwebsite[https://johndoe.dev](https://johndoe.dev)textdescriptionLaravel developertextstatusACTIVEtextlogo_(choose file)_file\n    \n\n---\n\n#### 📌 **3\\. Get Single Developer**\n\n- **Method**: `GET`\n    \n- **URL**: `http://your-domain.test/api/developers/{developer_id}`\n    \n- **Headers**:\n    \n    - `Accept: application/json`\n        \n\n---\n\n#### 📌 **4\\. Update Developer**\n\n- **Method**: `POST` or `PUT` _(based on Laravel route definition)_\n    \n- **URL**: `http://your-domain.test/api/developers/{developer_id}?_method=PUT`\n    \n- **Headers**:\n    \n    - `Accept: application/json`\n        \n    - `Content-Type: multipart/form-data`\n        \n- **Body (form-data)**:\n    \n    - Any field you want to update (same as create)\n        \n    - Include `logo` file only if updating image\n        \n\n---\n\n#### 📌 **5\\. Delete Developer**\n\n- **Method**: `DELETE`\n    \n- **URL**: `http://your-domain.test/api/developers/{developer_id}`\n    \n- **Headers**:\n    \n    - `Accept: application/json`",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43162929"
+	},
+	"item": [
+		{
+			"name": "Developer Import",
+			"item": [
+				{
+					"name": "Developer Import API",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/developer/Documents/Developers.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/developers/import",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"developers",
+								"import"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "## 📘 Postman Documentation – Developer Import API\n\n### ✅ **1\\. Request Overview**\n\n| Property | Value |\n| --- | --- |\n| **Method** | `POST` |\n| **URL** | `{{base_url}}/api/developers/import` |\n| **Auth** | (Optional – depends on your app, e.g. Bearer Token) |\n| **Content Type** | `multipart/form-data` |\n\n---\n\n### 📤 **2\\. Request Body Parameters**\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| file | `file` | ✅ | Excel/CSV file (`.xlsx`, `.xls`, or `.csv`) |\n\n**Example of expected Excel columns:**\n\n```\ntextCopyEditname | email           | phone number | website      | logo     | description     | status\nAli  | ali@test.com    | 01000000000  | ali.com      | logo.png | Test developer  | active\nSara | sara@test.com   | 01000000001  | sara.dev     | logo2.png| Freelancer      | inactive\n\n ```\n\n---\n\n### ✅ **3\\. Success Response**\n\n```\njsonCopyEdit{\n  \"success\": true,\n  \"message\": \"Developers imported successfully.\",\n  \"data\": [\n    {\n      \"name\": \"Ali\",\n      \"email\": \"ali@test.com\",\n      \"phone_number\": \"01000000000\",\n      \"status\": \"active\"\n    },\n    {\n      \"name\": \"Sara\",\n      \"email\": \"sara@test.com\",\n      \"phone_number\": \"01000000001\",\n      \"status\": \"inactive\"\n    }\n  ]\n}\n\n ```\n\n---\n\n### ❌ **4\\. Validation Error Response**\n\n```\njsonCopyEdit{\n  \"message\": \"The given data was invalid.\",\n  \"errors\": {\n    \"file\": [\n      \"The file field is required.\"\n    ]\n  }\n}\n\n ```\n\n---\n\n### ❌ **5\\. Import Exception Response**\n\n```\njsonCopyEdit{\n  \"success\": false,\n  \"message\": \"Row error: Invalid status: unknown\"\n}\n\n ```\n\n---\n\n## 🛠️ Tips for Postman Usage\n\n- **Authorization**: If you're using Sanctum, Passport, or JWT, use **Bearer Token** in the \"Authorization\" tab.\n    \n- **Uploading the file**: Use the `form-data` tab, and set the field key as `file`, with **type set to File**.\n    \n- **Base URL**: If you're working locally, it might look like `http://127.0.0.1:8000`."
+		},
+		{
+			"name": "Get All Developers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json().data;",
+							"",
+							"    responseData.forEach(function(developer) {",
+							"        pm.expect(developer).to.include.all.keys('developer_id', 'name', 'email', 'phone_number', 'website', 'logo', 'description', 'status', 'created_at', 'updated_at');",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Email is in a valid format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    responseData.data.forEach(function(developer) {",
+							"        pm.expect(developer.email).to.be.a('string').and.to.match(/^.+@.+\\..+$/);",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Phone number is in a valid format\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  responseData.data.forEach(function(developer) {",
+							"    pm.expect(developer.phone_number).to.match(/^\\d{10}$/);",
+							"  });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Data array is present and contains expected number of elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.have.property('data').that.is.an('array').with.lengthOf.at.least(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/developers",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"developers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Developer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "John Doe",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "john@example.com\t",
+							"type": "text"
+						},
+						{
+							"key": "phone_number",
+							"value": "1234567890",
+							"type": "text"
+						},
+						{
+							"key": "website",
+							"value": "https://johndoe.dev\t",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Laravel developer",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "ACTIVE",
+							"type": "text"
+						},
+						{
+							"key": "logo",
+							"type": "file",
+							"src": "/home/developer/Desktop/2.jpeg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/developers",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"developers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Developer",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "John Doe",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "john@example.com\t",
+							"type": "text"
+						},
+						{
+							"key": "phone_number",
+							"value": "1234567890",
+							"type": "text"
+						},
+						{
+							"key": "website",
+							"value": "https://johndoe.dev\t",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Laravel developer",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "ACTIVE",
+							"type": "text"
+						},
+						{
+							"key": "logo",
+							"type": "file",
+							"src": "/home/developer/Desktop/2.jpeg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/developers/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"developers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Single Developer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.data.developer_id).to.exist;",
+							"    pm.expect(responseData.data.name).to.exist;",
+							"    pm.expect(responseData.data.email).to.exist;",
+							"    pm.expect(responseData.data.phone_number).to.exist;",
+							"    pm.expect(responseData.data.website).to.exist;",
+							"    pm.expect(responseData.data.logo).to.exist;",
+							"    pm.expect(responseData.data.description).to.exist;",
+							"    pm.expect(responseData.data.status).to.exist;",
+							"    pm.expect(responseData.data.created_at).to.exist;",
+							"    pm.expect(responseData.data.updated_at).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Email is in a valid format\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.data.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/, \"Email should be in a valid format\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Phone number is in a valid format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.data.phone_number).to.be.a('string').and.to.match(/^\\+\\d{1,3}\\d{10}$/);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/developers/4",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"developers",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Developer",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/developers/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"developers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
