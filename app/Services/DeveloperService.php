@@ -6,61 +6,35 @@ use App\Interface\DeveloperInterface;
 
 class DeveloperService
 {
-    /**
-     * @var DeveloperInterface
-     */
-    protected $developerRepository;
+    protected $developerRepo;
 
-    /**
-     * @param DeveloperInterface $developerRepository
-     */
-    public function __construct(DeveloperInterface $developerRepository)
+    public function __construct(DeveloperInterface $developerRepo)
     {
-        $this->developerRepository = $developerRepository;
+        $this->developerRepo = $developerRepo;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getAll()
+    public function getAllDevelopers()
     {
-        return $this->developerRepository->all();
+        return $this->developerRepo->all();
     }
 
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function getById($id)
+    public function getDeveloperById($id)
     {
-        return $this->developerRepository->find($id);
+        return $this->developerRepo->find($id);
     }
 
-    /**
-     * @param array $data
-     * @return mixed
-     */
-    public function create(array $data)
+    public function createDeveloper($data)
     {
-        return $this->developerRepository->create($data);
+        return $this->developerRepo->create($data);
     }
 
-    /**
-     * @param $id
-     * @param array $data
-     * @return mixed
-     */
-    public function update($id, array $data)
+    public function updateDeveloper($id, $data)
     {
-        return $this->developerRepository->update($id, $data);
+        return $this->developerRepo->update($id, $data);
     }
 
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function delete($id)
+    public function deleteDeveloper($id)
     {
-        return $this->developerRepository->delete($id);
+        return $this->developerRepo->delete($id);
     }
 }

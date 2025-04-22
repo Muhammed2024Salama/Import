@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id('developer_id');
             $table->string('name');
             $table->string('email', 100)->unique();
-            $table->string('phone_number', 15);
+            $table->string('phone_number', 20);
             $table->string('website')->nullable();
             $table->string('logo')->nullable();
             $table->text('description')->nullable();

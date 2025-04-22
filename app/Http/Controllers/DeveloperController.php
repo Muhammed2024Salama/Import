@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Helper\ResponseHelper;
 use App\Http\Controllers\Base\Controller;
 use App\Services\DeveloperService;
+use App\Traits\ImageUploadTrait;
 use Illuminate\Http\Request;
 
 class DeveloperController extends Controller
 {
+    use ImageUploadTrait;
+
     /**
      * @var DeveloperService
      */
@@ -27,18 +30,8 @@ class DeveloperController extends Controller
      */
     public function index()
     {
-        $developers = $this->developerService->getAll();
+        $developers = $this->developerService->getAllDevelopers();
         return ResponseHelper::success('success', 'Developers fetched successfully', $developers);
-    }
-
-    /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show($id)
-    {
-        $developer = $this->developerService->getById($id);
-        return ResponseHelper::success('success', 'Developer fetched successfully', $developer);
     }
 
     /**
@@ -48,8 +41,22 @@ class DeveloperController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $developer = $this->developerService->create($data);
-        return ResponseHelper::success('success', 'Developer created successfully', $developer, 201);
+        if ($request->hasFile('logo')) {
+            $data['logo'] = $this->uploadImage($request, 'logo', 'uploads');
+        }
+
+        $developer = $this->developerService->createDeveloper($data);
+        return ResponseHelper::success('success', 'Developer created successfully', $developer);
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($id)
+    {
+        $developer = $this->developerService->getDeveloperById($id);
+        return ResponseHelper::success('success', 'Developer fetched successfully', $developer);
     }
 
     /**
@@ -59,8 +66,14 @@ class DeveloperController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $developer = $this->developerService->getDeveloperById($id);
         $data = $request->all();
-        $developer = $this->developerService->update($id, $data);
+
+        if ($request->hasFile('logo')) {
+            $data['logo'] = $this->updateImage($request, 'logo', 'uploads', $developer->logo);
+        }
+
+        $developer = $this->developerService->updateDeveloper($id, $data);
         return ResponseHelper::success('success', 'Developer updated successfully', $developer);
     }
 
@@ -70,7 +83,12 @@ class DeveloperController extends Controller
      */
     public function destroy($id)
     {
-        $this->developerService->delete($id);
+        $developer = $this->developerService->getDeveloperById($id);
+        if ($developer->logo) {
+            $this->deleteImage($developer->logo);
+        }
+
+        $this->developerService->deleteDeveloper($id);
         return ResponseHelper::success('success', 'Developer deleted successfully');
     }
 }

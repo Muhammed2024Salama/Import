@@ -47,11 +47,12 @@ class DeveloperRepository implements DeveloperInterface
 
     /**
      * @param $id
-     * @return mixed
+     * @return true
      */
     public function delete($id)
     {
         $developer = Developer::findOrFail($id);
-        return $developer->delete();
+        $developer->delete();
+        return true;
     }
 }
