@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Helper\ResponseHelper;
+use App\Http\Controllers\Base\BaseController;
 use App\Http\Controllers\Base\Controller;
 use App\Services\DeveloperService;
 use App\Traits\ImageUploadTrait;
 use Illuminate\Http\Request;
 
-class DeveloperController extends Controller
+class DeveloperController extends BaseController
 {
     use ImageUploadTrait;
 

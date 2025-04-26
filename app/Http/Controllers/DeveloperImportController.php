@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Helper\ResponseHelper;
+use App\Http\Controllers\Base\BaseController;
 use App\Http\Controllers\Base\Controller;
 use App\Services\ImportDeveloperService;
 use Illuminate\Http\Request;
 
-class DeveloperImportController extends Controller
+class DeveloperImportController extends BaseController
 {
     /**
      * @var ImportDeveloperService
