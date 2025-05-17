@@ -54,7 +54,6 @@ class ResponseHelper
      * @param $message string
      * @param $statusCode integer
      * @return JsonResponse
-     * Function : Common function to display error - Json Response
      */
     public static function error($status = 'error', $message = null, $statusCode = 400): JsonResponse
     {
